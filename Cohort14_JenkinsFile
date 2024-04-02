@@ -1,10 +1,51 @@
 pipeline {
-    agent any
-    stages {
-        stage ('Simple script') {
-            steps {
-                echo "this is is a simple script"
-            }
-        }
+  agent any
+  tools {
+    maven 'Maven3.9.4'
+  }
+  environment {
+    GIT_REPO_URL = 'https://github.com/ciwuezi/maven-web-app.git'
+  }
+  stages{
+    stage('Clone from Github'){
+      steps{
+        git "${GIT_REPO_URL}"
+      }
     }
+    stage('Build'){
+      steps{
+        sh 'mvn package'
+      }
+    }
+    stage('Nexus'){
+      steps{
+        sh 'mvn deploy'
+      }
+    }
+    stage('Approval'){
+      steps{
+        echo 'Seeking approval. Sending email to team lead'
+        emailext body: 'Please authorise for deployment to Tomcat - Chuks', to: 'cbk4real@gmail.com', subject: 'Approve Deployment'
+        timeout(time: 5, unit: "DAYS"){
+          input message: 'Approve to deploy to production'
+        }
+      }
+    }
+    stage('Deployment stage'){
+      steps{
+          deploy adapters: [tomcat9(credentialsId: 'TomCat_Cred', path: '', url: 'http://3.131.35.1:7000/')], contextPath: null, war: 'target/*war'
+      }
+    }
+  }
+  post {
+    always {
+      echo "I am done"
+    }
+    success {
+      echo "Deploying to tomcat successful"
+    }
+    failure {
+      echo "Deploying to tomcat failed"
+    }
+  }
 }
