@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage ('Simple script') {
             steps {
-                echo this is is a simple script
+                echo "this is is a simple script"
             }
         }
     }
