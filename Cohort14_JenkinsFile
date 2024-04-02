@@ -12,6 +12,11 @@ pipeline {
         git "${GIT_REPO_URL}"
       }
     }
+    stage('Test of SonarQ'){
+      steps{
+        sh 'mvn sonar:sonar'
+      }
+    }
     stage('Build'){
       steps{
         sh 'mvn package'
