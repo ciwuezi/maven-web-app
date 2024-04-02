@@ -8,4 +8,4 @@ say_hello_world:
 	$(call say_hello, "Francisca", "Dogbatse")
 
 say_hello_John:
-	$(call say_hello, "Johnson", "Nwaka")
+	$(call say_hello, "Johnson", "Nwama")
