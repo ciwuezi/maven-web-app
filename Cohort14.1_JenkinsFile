@@ -32,6 +32,7 @@ pipeline {
       steps{
         echo 'Seeking approval. Sending email to team lead'
         emailext body: 'Please authorise for deployment to Tomcat - Chuks', to: 'cbk4real@gmail.com', subject: 'Approve Deployment'
+        slackSend(channel: 'devops', message: 'Please authorise for deployment to Tomcat')
         timeout(time: 5, unit: "DAYS"){
           input message: 'Approve to deploy to production'
         }
