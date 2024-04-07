@@ -1,6 +1,6 @@
 @Library('Cohort14-SharedLibrary')_
 pipeline {
-  agent any
+  agent {label 'Agent1'}
   tools {
     maven 'Maven3.9.4'
   }
