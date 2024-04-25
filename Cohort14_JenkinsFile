@@ -14,7 +14,7 @@ pipeline {
     }
     stage('Predeployment - Building containers with base images'){
       steps{
-        //sh 'docker rm -f $(docker ps -aq)'
+        sh 'docker rm -f $(docker ps -aq)'
         sh 'docker rmi -f $(docker images -q)'
         //sh 'docker build -t tomcat:jre11 -f DockerfileTomcat .'
         //sh 'docker run --name tomcat -d -p 7000:8080 tomcat:jre11'
