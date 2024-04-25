@@ -5,4 +5,4 @@ WORKDIR /app
 #ENTRYPOINT echo 'nexus.scripts.allowCreation=true' >> /opt/sonatype/sonatype-work/nexus3/etc/nexus.properties && echo 'nexus.security.randompassword=false' >> /opt/sonatype/sonatype-work/nexus3/etc/nexus.properties
 COPY snapshot-repo.json /app
 COPY createnexusrepo.sh /app
-RUN sh createnexusrepo.sh
+#RUN sh createnexusrepo.sh
