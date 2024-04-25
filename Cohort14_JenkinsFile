@@ -7,50 +7,15 @@ pipeline {
     GIT_REPO_URL = 'https://github.com/ciwuezi/maven-web-app.git'
   }
   stages{
-    stage('Clone from Github'){
+    stage('Predeployment - Building containers with base images'){
       steps{
-        git "${GIT_REPO_URL}"
+        docker build -t tomcat:jre11 -f DockerfileTomcat .
+        docker run --name tomcat -d -p 7000:8080 tomcat:jre11
+        docker build -t nexus:3.67.1 -f DockerfileNexus .
+        docker run --name nexus -d -p 8081:8081 nexus:3.67.1
+        docker build -t sonarqube:lts -f DockerfileSonarqube .
+        docker run --name sonarqube -d -p 9000:9000 sonarqube:lts
       }
-    }
-    stage('Test of SonarQ'){
-      steps{
-        sh 'mvn sonar:sonar'
-      }
-    }
-    stage('Build'){
-      steps{
-        sh 'mvn package'
-      }
-    }
-    stage('Nexus'){
-      steps{
-        sh 'mvn deploy'
-      }
-    }
-    stage('Approval'){
-      steps{
-        echo 'Seeking approval. Sending email to team lead'
-        emailext body: 'Please authorise for deployment to Tomcat - Chuks', to: 'cbk4real@gmail.com', subject: 'Approve Deployment'
-        timeout(time: 5, unit: "DAYS"){
-          input message: 'Approve to deploy to production'
-        }
-      }
-    }
-    stage('Deployment stage'){
-      steps{
-          deploy adapters: [tomcat9(credentialsId: 'TomCat_Cred', path: '', url: 'http://3.131.35.1:7000/')], contextPath: null, war: 'target/*war'
-      }
-    }
-  }
-  post {
-    always {
-      echo "I am done"
-    }
-    success {
-      echo "Deploying to tomcat successful"
-    }
-    failure {
-      echo "Deploying to tomcat failed"
     }
   }
 }
