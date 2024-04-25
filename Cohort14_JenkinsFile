@@ -1,3 +1,4 @@
+@Library('Cohort14-SharedLibrary')_
 pipeline {
   agent any
   tools {
@@ -34,11 +35,11 @@ pipeline {
         cohort14('Build')
       }
     }
-    stage('Nexus'){
-      steps{
-        cohort14('Deploy')
-      }
-    }
+    //stage('Nexus'){
+      //steps{
+        //cohort14('Deploy')
+      //}
+    //}
     stage('Approval'){
       steps{
         echo 'Seeking approval. Sending email to team lead'
