@@ -1,2 +1,2 @@
 FROM tomcat:jre11-temurin
-EXPOSE 8080
+EXPOSE 7000
