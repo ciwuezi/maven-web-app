@@ -16,23 +16,43 @@ pipeline {
       steps{
         sh 'docker rm -f $(docker ps -a)'
         sh 'docker rmi -f $(docker images -q)'
-        //sh 'docker build -t tomcat:jre11 -f DockerfileTomcat .'
-        //sh 'docker run --name tomcat -d -p 7000:8080 tomcat:jre11'
+        sh 'docker build -t tomcat:jre11 -f DockerfileTomcat .'
+        sh 'docker run --name tomcat -d -p 7000:8080 tomcat:jre11'
         sh 'docker build -t nexus:3.67.1 -f DockerfileNexus .'
         sh 'docker run --name nexus -d -p 8081:8081 nexus:3.67.1'
-        //sh 'docker build -t sonarqube:lts -f DockerfileSonarqube .'
-        //sh 'docker run --name sonarqube -d -p 9000:9000 sonarqube:lts'
+        sh 'docker build -t sonarqube:lts -f DockerfileSonarqube .'
+        sh 'docker run --name sonarqube -d -p 9000:9000 sonarqube:lts'
       }
     }
-    //stage('Build'){
-      //steps{
-        //sh 'mvn package'
-      //}
-    //}
-    //stage('Nexus'){
-      //steps{
-        //sh 'mvn deploy'
-      //}
-    //}
+    stage('Test of SonarQ'){
+      steps{
+        cohort14('Test')
+      }
+    }
+    stage('Build'){
+      steps{
+        cohort14('Build')
+      }
+    }
+    stage('Nexus'){
+      steps{
+        cohort14('Deploy')
+      }
+    }
+    stage('Approval'){
+      steps{
+        echo 'Seeking approval. Sending email to team lead'
+        emailext body: 'Please authorise for deployment to Tomcat - Chuks. Link to job: ${JOB_URL}', to: 'cbk4real@gmail.com', subject: 'Approve Deployment'
+        slackSend channel: 'devops', message: "Please authorise for deployment to Tomcat - Chuks. Link to job: ${JOB_URL} "
+        timeout(time: 5, unit: "DAYS"){
+          input message: 'Approve to deploy to production'
+        }
+      }
+    }
+    stage('Deployment stage'){
+      steps{
+          deploy adapters: [tomcat9(credentialsId: 'TomCat_Cred', path: '', url: 'http://18.217.119.205:7000/')], contextPath: null, war: 'target/*war'
+      }
+    }
   }
 }
