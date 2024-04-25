@@ -7,6 +7,11 @@ pipeline {
     GIT_REPO_URL = 'https://github.com/ciwuezi/maven-web-app.git'
   }
   stages{
+    stage('Clone from Github'){
+      steps{
+        git "${GIT_REPO_URL}"
+      }
+    }
     stage('Predeployment - Building containers with base images'){
       steps{
         sh 'docker build -t tomcat:jre11 -f DockerfileTomcat .'
