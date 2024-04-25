@@ -2,7 +2,7 @@
 
 set -e
 
-NEXUS_URL="http://localhost:8081"
+NEXUS_URL="http://3.146.107.126:8081"
 NEXUS_USERNAME="admin"
 NEXUS_PASSWORD="admin123"
 REPO_JSON_FILE="snapshot-repo.json"
