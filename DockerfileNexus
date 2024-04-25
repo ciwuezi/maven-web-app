@@ -1,3 +1,3 @@
 FROM sonatype/nexus3:3.67.1-java11
 #copy configuration file to in docker container
-COPY nexus.properties /opt/sonatype/sonatype-work/nexus3/etc/nexus.properties
+#COPY nexus.properties /opt/sonatype/sonatype-work/nexus3/etc/nexus.properties
