@@ -1,0 +1,17 @@
+{
+  "name": "my-snapshot-repo",
+  "type": "hosted",
+  "format": "maven2",
+  "url": "http://localhost:8081/repository/my-snapshot-repo",
+  "online": true,
+  "storage": {
+    "blobStoreName": "default",
+    "strictContentTypeValidation": false
+  },
+  "cleanup": null,
+  "maven": {
+    "versionPolicy": "SNAPSHOT",
+    "layoutPolicy": "STRICT"
+  },
+  "writePolicy": "ALLOW_REDUNDANT_DEPLOYMENTS"
+}
