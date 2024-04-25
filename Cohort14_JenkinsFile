@@ -9,12 +9,12 @@ pipeline {
   stages{
     stage('Predeployment - Building containers with base images'){
       steps{
-        docker build -t tomcat -f DockerfileTomcat .
-        docker run --name tomcat -d -p 7000:8080 tomcat
-        docker build -t nexus:3.67.1 -f DockerfileNexus .
-        docker run --name nexus -d -p 8081:8081 nexus:3.67.1
-        docker build -t sonarqube:lts -f DockerfileSonarqube .
-        docker run --name sonarqube -d -p 9000:9000 sonarqube:lts
+        sh 'docker build -t tomcat:jre11 -f DockerfileTomcat .'
+        sh 'docker run --name tomcat -d -p 7000:8080 tomcat:jre11'
+        sh 'docker build -t nexus:3.67.1 -f DockerfileNexus .'
+        sh 'docker run --name nexus -d -p 8081:8081 nexus:3.67.1'
+        sh 'docker build -t sonarqube:lts -f DockerfileSonarqube .'
+        sh 'docker run --name sonarqube -d -p 9000:9000 sonarqube:lts'
       }
     }
   }
