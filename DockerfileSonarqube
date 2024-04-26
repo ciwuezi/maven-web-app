@@ -1,2 +1,4 @@
 FROM sonarqube:lts-community
-RUN apt-get update && apt-get install curl && curl -u admin:admin -X POST "http://172.17.0.4:9000/api/users/change_password?login=admin&previousPassword=admin&password=admin123"
+RUN apt-get update 
+RUN apt-get install curl 
+RUN curl -u admin:admin -X POST "http://172.17.0.4:9000/api/users/change_password?login=admin&previousPassword=admin&password=admin123"
