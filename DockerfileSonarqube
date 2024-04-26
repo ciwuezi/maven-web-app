@@ -1,2 +1,2 @@
 FROM sonarqube:lts-community
-RUN curl -u admin:admin -X POST "http://172.17.0.4:9000/api/users/change_password?login=admin&previousPassword=admin&password=admin123"
+ENTRYPOINT curl -u admin:admin -X POST "http://172.17.0.4:9000/api/users/change_password?login=admin&previousPassword=admin&password=admin123"
