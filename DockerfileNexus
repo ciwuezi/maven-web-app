@@ -1,8 +1,1 @@
 FROM sonatype/nexus3:3.67.1-java11
-WORKDIR /app
-#copy configuration file to in docker container
-#COPY nexus.properties /opt/sonatype/sonatype-work/nexus3/etc/nexus.properties
-#ENTRYPOINT echo 'nexus.scripts.allowCreation=true' >> /opt/sonatype/sonatype-work/nexus3/etc/nexus.properties && echo 'nexus.security.randompassword=false' >> /opt/sonatype/sonatype-work/nexus3/etc/nexus.properties
-COPY snapshot-repo.json app/
-COPY createnexusrepo.sh app/
-#RUN sh createnexusrepo.sh
