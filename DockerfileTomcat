@@ -1,5 +1,5 @@
-FROM tomcat:jre11-temurin
 FROM tomcat:9.0.87-jre11-temurin-jammy
-RUN mv /usr/local/tomcat/webapps /usr/local/tomcat/webapps2
-RUN mv /usr/local/tomcat/webapps.dist /usr/local/tomcat/webapps
-RUN echo '<user username="admin" password="admin123" roles="manager-gui,manager-script,admin-gui"/>' >> /usr/local/tomcat/conf/tomcat-users.xml
+#FROM tomcat:jre11-temurin
+#RUN mv /usr/local/tomcat/webapps /usr/local/tomcat/webapps2
+#RUN mv /usr/local/tomcat/webapps.dist /usr/local/tomcat/webapps
+#RUN echo '<user username="admin" password="admin123" roles="manager-gui,manager-script,admin-gui"/>' >> /usr/local/tomcat/conf/tomcat-users.xml
