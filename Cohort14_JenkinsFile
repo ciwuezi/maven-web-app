@@ -1,4 +1,4 @@
-@Library('Cohort14-SharedLibrary')_
+@Library('Pipeline_Library')_
 pipeline {
   agent any
   tools {
@@ -15,13 +15,17 @@ pipeline {
     }
     stage('Predeployment - Building containers with base images'){
       steps{
-        sh 'docker rmi -f $(docker images -q)'
+        sh 'docker rmi -f $(docker images -q)
         sh 'docker build -t tomcat:jre11 -f DockerfileTomcat .'
         sh 'docker run --name tomcat -d -p 7000:8080 tomcat:jre11'
         sh 'docker build -t nexus:3.67.1 -f DockerfileNexus .'
         sh 'docker run --name nexus -d -p 8081:8081 nexus:3.67.1'
         sh 'docker build -t sonarqube:lts -f DockerfileSonarqube .'
         sh 'docker run --name sonarqube -d -p 9000:9000 sonarqube:lts'
+        emailext body: 'Containers have been set up. Kindy check the sonarqube, nexus and tomcat containers and make sure everything has been properly set up, then continue the buidd. Link to job: ${JOB_URL}', to: 'cbk4real@gmail.com', subject: 'Approve Deployment'
+        slackSend channel: 'devops', message: "Containers have been set up. Kindy check the sonarqube, nexus and tomcat containers and make sure everything has been properly set up, then continue the buidd. Link to job: ${JOB_URL}"
+        timeout(time: 2, unit: "HOURS"){
+          input message: 'Openup Containers and do the necessary configuration'
       }
     }
     stage('Test of SonarQ'){
@@ -34,17 +38,17 @@ pipeline {
         cohort14('Build')
       }
     }
-    //stage('Nexus'){
-      //steps{
-        //cohort14('Deploy')
-      //}
-    //}
+    stage('Nexus'){
+      steps{
+        cohort14('Deploy')
+      }
+    }
     stage('Approval'){
       steps{
         echo 'Seeking approval. Sending email to team lead'
         emailext body: 'Please authorise for deployment to Tomcat - Chuks. Link to job: ${JOB_URL}', to: 'cbk4real@gmail.com', subject: 'Approve Deployment'
         slackSend channel: 'devops', message: "Please authorise for deployment to Tomcat - Chuks."
-        timeout(time: 5, unit: "DAYS"){
+        timeout(time: 5, unit: "HOURS"){
           input message: 'Approve to deploy to production'
         }
       }
