@@ -26,8 +26,9 @@ pipeline {
         slackSend channel: 'devops', message: "Containers have been set up. Kindy check the sonarqube, nexus and tomcat containers and make sure everything has been properly set up, then continue the buidd. Link to job: ${JOB_URL}"
         timeout(time: 2, unit: "HOURS"){
           input message: 'Openup Containers and do the necessary configuration'
+        }
       }
-    }
+    }  
     stage('Test of SonarQ'){
       steps{
         cohort14('Test')
